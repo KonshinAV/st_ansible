@@ -1,0 +1,17 @@
+
+
+[all_servers:children]
+staging_servers
+clients_servers
+
+[staging_servers]
+linux_ubuntu_server	ansible_host=192.168.100.11
+
+[clients_servers]
+linux_client_1		ansible_host=192.168.100.12
+linux_client_2		ansible_host=192.168.100.13
+
+# Создание переменных для группы staging_servers 
+[all_servers:vars]
+ansible_user=konshinav
+ansible_ssh_public_key_file=/home/konshinav/.ssh/id_rsa.pub

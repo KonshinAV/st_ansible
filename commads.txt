@@ -1,0 +1,35 @@
+ansible -i hosts.txt staging_servers -m ping
+# -i файл инвентори
+# staging_servers имя группы где выполнять, all - все что есть в intentory
+# -m модуль
+
+ansible-inventory --list
+# Показать invertory
+
+ansible staging_servers -m setup
+# Показать информацию о сервере
+
+ansible all_servers -m shell -a "uptime"
+# выполнить команду удаленно
+
+ansible all_servers -m copy -a "src=test_hello_file.txt dest=/home" -b
+# копирования файла с мастера на клиенты
+# -b  ключ для выполнения команды с правами sudo
+
+ansible all -m file -a "path=/home/test_hello_file.txt state=absent" -b
+# удалить файл
+
+ansible all_servers -m get_url -a "url=https://............... dest=/home" -b
+# скачать файл (из интернета) на клиента
+
+ansible clients_servers -m apt -a "name=htop state=latest" -b
+# Установиь пакет
+
+ansible staging_servers -m apt -a "name=htop state=absent" -b
+# Удалить пакет
+
+ansible staging_servers -m uri -a "url=https://google.com return_content=yes"
+# Получить информацию с сайта (CURL)
+
+ansible clients_servers -m service -a "name=apache2 state=started" -b
+# Запустить сервис
