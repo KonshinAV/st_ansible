@@ -1,6 +1,44 @@
 
-[staging_servers]
-linux_ubuntu_server	ansible_host=192.168.100.11  ansible_user=konshinav  ansible_sshprivate_key_file=/home/konshinav/.ssh/id_rsa.pub
-linux_client_1		ansible_host=192.168.100.12  ansible_user=konshinav  ansible_sshprivate_key_file=/home/konshinav/.ssh/id_rsa.pub
-linux_client_2		ansible_host=192.168.100.13  ansible_user=konshinav  ansible_sshprivate_key_file=/home/konshinav/.ssh/id_rsa.pub
+#1.1.1.1
+#x_server ansible_host=2.2.2.2
+# Записи без групп входят в группу ungrouped и all (все записи)
 
+[staging_db]
+server_1 ansible_host=20.20.20.20
+
+[staging_web]
+123.123.123.123
+
+[staging_all:children]
+# Группа с потомками
+staging_db
+staging_web
+staging_servers
+
+
+[prod_db]
+
+[prod_web]
+
+[prod_app]
+
+[prod_all:children]
+prod_db
+prod_web
+prod_app
+
+
+#[staging_servers]
+#linux_ubuntu_server	ansible_host=192.168.100.11  ansible_user=konshinav  ansible_ssh_public_key_file=/home/konshinav/.ssh/id_rsa.pub
+#linux_client_1		ansible_host=192.168.100.12  ansible_user=konshinav  ansible_ssh_public_key_file=/home/konshinav/.ssh/id_rsa.pub
+#linux_client_2		ansible_host=192.168.100.13  ansible_user=konshinav  ansible_ssh_public_key_file=/home/konshinav/.ssh/id_rsa.pub
+
+[staging_servers]
+linux_ubuntu_server	ansible_host=192.168.100.11
+linux_client_1		ansible_host=192.168.100.12
+linux_client_2		ansible_host=192.168.100.13
+
+# Создание переменных для группы staging_servers 
+[staging_servers:vars]
+ansible_user=konshinav
+ansible_ssh_public_key_file=/home/konshinav/.ssh/id_rsa.pub
