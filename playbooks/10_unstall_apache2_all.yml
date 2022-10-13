@@ -1,0 +1,16 @@
+---
+
+- name: Uninstall Apache from ALL servers
+  hosts: all_servers
+  become: yes
+
+  vars:
+   remote_index: /var/www/html/index.html
+   local_index: ./site/index.html
+
+  tasks:
+  - name: Uninstall Apache2
+    apt: name=apache2 state=absent
+
+  - name: Clear /var/www/html/
+    file: path={{remote_index}} state=absent
