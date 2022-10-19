@@ -1,0 +1,29 @@
+
+---
+- name: Uninstall Apache Servers
+  hosts: all_servers
+  become: yes
+
+  vars:
+    site_dest: /var/www/html/index.html
+
+  tasks:
+    - name:
+      debug: msg="{{ansible_os_family}}"
+
+    - block: #================ Uninstall Apache from RedHat ====================
+        - name: Remove Apache
+          yum: name=httpd state=absent
+
+        - name: Remove Site
+          file: path={{site_dest}} state=absent
+      when: ansible_os_family == "RedHat"
+
+
+    - block:
+        - name: #================ Uninstall Apache from Debian ==================
+          apt: name=apache2 state=absent
+
+        - name: Remove Site
+          file: path={{site_dest}} state=absent
+      when: ansible_os_family == "Debian"

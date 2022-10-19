@@ -1,0 +1,18 @@
+---
+- name: Uninstall Apache
+  hosts: centos_clients
+  become: yes
+
+  vars:
+    site_sourse: ./site/index.html
+    site_dest: /var/www/html/
+
+  tasks:
+  - name: Print OS_family
+    debug: msg="ansible_os_family {{ansible_os_family}}"
+
+  - name: Uninstall Httpd
+    yum: name=httpd state=absent
+
+  - name: Remove index file
+    file: path={{site_dest}} state=absent

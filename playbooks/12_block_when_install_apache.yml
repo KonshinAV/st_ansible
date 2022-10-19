@@ -1,0 +1,50 @@
+
+---
+
+- name: Install Apache Servers
+  hosts: all_servers
+  become: yes
+
+  vars:
+    site_source: ./site/index.html
+    site_dest: /var/www/html/
+
+  tasks:
+
+  - name: Check OS Family
+    debug: msg={{ansible_os_family}}
+
+  - block: #========== Install Apache on RedHat ================
+      - name: Installing Apache for redHat
+        yum: name=httpd state=latest
+
+      - name: Copying site
+        copy: src={{site_source}} dest={{site_dest}} mode=0555
+        notify: restart_apache_redhat
+
+      - name: Starting services
+        service: name=httpd state=started enabled=yes
+
+    when: ansible_os_family == "RedHat"
+
+
+  - block: #========== Install Apache on Debian ================
+      - name:
+        apt: name=apache2 state=latest
+
+      - name: Copying site
+        copy: src={{site_source}} dest={{site_dest}} mode=0555
+        notify: restart_apache_debian
+
+      - name: Starting services
+        service: name=apache2 state=started enabled=yes
+
+    when: ansible_os_family == "Debian"
+
+
+  handlers:
+    - name: restart_apache_redhat
+      service: name=httpd state=restarted
+
+    - name: restart_apache_debian
+      service: name=apache2 state=restarted

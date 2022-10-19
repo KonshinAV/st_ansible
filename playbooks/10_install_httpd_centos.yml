@@ -1,0 +1,26 @@
+
+---
+- name: Install Apache on Centos
+  hosts: centos_clients
+  become: yes
+
+  vars:
+    site_sourse: ./site/index.html
+    site_dest: /var/www/html/
+
+  tasks:
+  - name: Install Apache
+    yum:
+      name: httpd
+      state: latest
+
+  - name: Copy site page
+    copy: src={{site_sourse}} dest={{site_dest}}
+    notify: restart_apache
+
+  - name: Start Apache
+    service: name=httpd state=started enabled=yes
+
+  handlers:
+  - name: restart_apache
+    service: name=httpd state=restarted
