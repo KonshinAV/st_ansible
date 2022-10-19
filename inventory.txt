@@ -1,12 +1,21 @@
 
 
 [all_servers:children]
+ubuntu_servers
+centos_clients
+
+[ubuntu_servers:children]
 staging_servers
-clients_servers
+ubuntu_clients
 
 [staging_servers]
-linux_ubuntu_server	ansible_host=192.168.100.11  owner=owner_by_linux_ubuntu_server
+linux_ubuntu_server     ansible_host=192.168.100.11  owner=owner_by_linux_ubuntu_server
 
-[clients_servers]
-linux_client_1		ansible_host=192.168.100.12  owner=owner_by_linux_client_1
-linux_client_2		ansible_host=192.168.100.13  owner=owner_by_linux_client_2
+[ubuntu_clients]
+ubuntu_client_1		ansible_host=192.168.100.12  owner=owner_by_linux_client_1
+ubuntu_client_2		ansible_host=192.168.100.13  owner=owner_by_linux_client_2
+
+[centos_clients]
+centos_client1		ansible_host=192.168.100.14
+centos_client2		ansible_host=192.168.100.15
+

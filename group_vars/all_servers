@@ -2,3 +2,4 @@
 
 ansible_user			: konshinav
 ansible_ssh_public_key_file	: /home/konshinav/.ssh/id_rsa.pub
+test_var                        : any_variable_123

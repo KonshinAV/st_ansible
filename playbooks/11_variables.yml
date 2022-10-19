@@ -1,0 +1,44 @@
+---
+
+- name: Playbook for Variable's lesson
+  hosts: all
+  become: yes
+
+  vars:
+    var1: Variable_1
+    var2: Variable_2
+    message1: Privet
+    message2: World
+    secret: lskdjflj029jmj2jr
+
+  tasks:
+  - name: Print secret variable
+    debug:
+      var: secret
+
+#  - name: Pring owners
+#    debug:
+#      msg: "Pring {{owner}}"
+
+#  - name: Print variables
+#    debug:
+#      msg: "Print var_1 --> {{ var1 }}" # Печать переменной
+
+#  - debug: msg="Print var2 --> {{var2}}"
+
+#  - set_fact: full_message="{{message1}} {{message2}}, {{owner}}"
+
+#  - name: Print Full Messages
+#    debug:
+#      msg: "{{full_message}}"
+
+  - name: Pring var from ansible setup
+    debug:
+      msg: "ansible_memory_mb = {{ansible_memory_mb.real.used}}"
+
+  - shell: uptime # сохранение результатов выполнения в переменную
+    register: var_uptime
+
+  - name: Pring Uptime
+    debug: msg="{{var_uptime.stdout}}"
+

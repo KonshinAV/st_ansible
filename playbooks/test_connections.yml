@@ -1,0 +1,9 @@
+
+---
+- name: Test-Connections
+  hosts: all_servers
+  become: yes
+
+  tasks:
+   - name: ping
+     ping:
