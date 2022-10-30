@@ -6,7 +6,7 @@
   become: yes
   
   vars:
-    site_source: ./site_2
+    site_source: ./site
     site_dest: /var/www/html
     install_web_server: yes
   
