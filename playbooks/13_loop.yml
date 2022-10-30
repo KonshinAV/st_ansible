@@ -1,0 +1,24 @@
+
+---
+
+- name: Loops Playbook
+  hosts: ubuntu_server1
+  become: yes
+  
+  tasks:
+  - name: Say Hello to ALL
+    debug: msg="hello {{ item }}"
+    with_items:
+      - "Vasia"
+      - "Petia"
+      - "Kolia"
+  
+  - name: Untill loop
+    shell: echo -n Z >> myfile.txt && cat myfile.txt
+    register: output
+    delay: 1
+    retries: 5
+    until: output.stdout.find("ZZZZ") == false
+    
+  - name: Print Output
+    debug: var=output.stdout

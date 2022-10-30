@@ -1,0 +1,79 @@
+
+---
+
+- name: Install Web Server using loop site_2
+  hosts: centos_server2, ubuntu_server2
+  become: yes
+  
+  vars:
+    site_source: ./site_2
+    site_dest: /var/www/html
+    install_web_server: yes
+  
+  tasks:
+    - name:
+      debug: msg="Print var install_server value is {{install_web_server}}"
+    - block: # Install Web Server on Debian
+      - block:
+        - name: Install Web Server on Debian
+          apt: name=apache2 state=latest
+
+        - name: Start apache2
+          service: name=apache2 state=started enabled=yes
+        when: ansible_os_family == "Debian"
+
+      - block: #Install Web Server on RedHat
+        - name: Install Web Server on RedHat
+          yum: name=httpd state=latest
+        
+        - name: Start httpd service
+          service: name=httpd state=started enabled=yes 
+        when: ansible_os_family == "RedHat"
+
+      - name: Copy site
+        #copy: src={{site_source}}/ {{item}} dest={{site_dest}}
+        #with_items:
+        #  - "index.html"
+        copy: src={{item}} dest={{site_dest}}
+        with_fileglob: "{{site_source}}/*.*"
+
+      notify:
+        - restart_apache_debian
+        - restart_apache_redhat
+
+      when: install_web_server == True
+
+    - block: # Remove Web Server
+      - block:
+        - name: Remove apache2
+          apt: name=apache2 state=absent
+        when: ansible_os_family == "Debian"
+      
+      - block: #Remove httpd
+        - name: Remove httpd
+          yum: name=httpd state=absent
+        when: ansible_os_family == "RedHat" 
+      
+      - name: Find all files in /var/www/html
+        find:
+          path: "{{site_dest}}"
+        register: cleanup_files
+
+      - name: Remove files from /var/www/html
+        file:
+          path: "{{item.path}}"
+          state: absent
+        with_items: "{{cleanup_files.files}}"
+
+      when: install_web_server == False
+
+  
+
+  handlers:
+    - name: restart_apache_debian
+      service: name=apache2 state=restarted
+      when: ansible_os_family == "Debian"
+
+    - name: restart_apache_redhat
+      service: name=httpd state=restarted
+      when: ansible_os_family == "RedHat"
