@@ -1,0 +1,11 @@
+
+---
+
+- name: Install Web Server
+  hosts: "{{ HOSTS }}"
+  become: yes
+
+  roles:
+    - "{{TASK}}"
+    # - deploy_apache
+    # - remove_apache

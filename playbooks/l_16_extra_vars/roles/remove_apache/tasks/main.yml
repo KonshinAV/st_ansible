@@ -1,0 +1,24 @@
+---
+# tasks file for remove_apache
+
+- block: # Remove Web Server
+  - block:
+    - name: Remove apache2
+      apt: name=apache2 state=absent
+    when: ansible_os_family == "Debian"
+  
+  - block: #Remove httpd
+    - name: Remove httpd
+      yum: name=httpd state=absent
+    when: ansible_os_family == "RedHat" 
+  
+  - name: Find all files in /var/www/html
+    find:
+      path: "{{site_dest}}"
+    register: cleanup_files
+
+  - name: Remove files from /var/www/html
+    file:
+      path: "{{item.path}}"
+      state: absent
+    with_items: "{{cleanup_files.files}}"

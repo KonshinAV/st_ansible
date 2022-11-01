@@ -1,0 +1,4 @@
+---
+# vars file for remove_apache
+
+site_dest: /var/www/html

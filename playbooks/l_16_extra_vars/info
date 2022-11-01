@@ -1,0 +1,2 @@
+Вызывается командой
+ansible-playbook playbook_name --extra-var "MYHOSTS=centos_server2 owner=<<<Konshinav>>>"

@@ -6,4 +6,5 @@
   become: yes
 
   roles:
-    - remove_apache
+    - {role: remove_apache, when: ansible_system == 'Linux'}
+    # - deploy_apache
