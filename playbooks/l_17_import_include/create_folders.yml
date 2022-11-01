@@ -1,0 +1,13 @@
+
+---
+
+- name: Create folder1
+  ansible.builtin.file:
+    path: /home/secret/folder1
+    state: directory
+    mode: 0775
+- name: Create folder2
+  ansible.builtin.file:
+    path: /home/secret/folder2
+    state: directory
+    mode: 0755

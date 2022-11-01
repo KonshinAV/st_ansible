@@ -1,0 +1,17 @@
+
+---
+
+- name: Create files
+  hosts: "{{HOSTS}}"
+  become: yes
+
+  tasks:
+  - name: Ping Test
+    ansible.builtin.ping:
+
+  - name: create_folders
+    ansible.builtin.include_tasks: create_folders.yml
+  
+  - name: create_files
+    ansible.builtin.include_tasks: create_files.yml
+
