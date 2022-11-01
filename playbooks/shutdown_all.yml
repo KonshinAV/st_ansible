@@ -1,0 +1,9 @@
+
+---
+- name: Shutdown ALL VM
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: shutdown all
+      shell: shutdown now

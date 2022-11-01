@@ -1,0 +1,31 @@
+
+---
+
+- name: Install Web Server using loop site_2
+  hosts: all_servers
+  become: yes
+  
+  vars:
+    site_path: /var/www/html
+  
+  tasks:
+    - block:
+      - name: Remove apache2
+        apt: name=apache2 state=absent
+      when: ansible_os_family == "Debian"
+    
+    - block: #Remove httpd
+      - name: Remove httpd
+        yum: name=httpd state=absent
+      when: ansible_os_family == "RedHat" 
+    
+    - name: Find all files in /var/www/html
+      find:
+        path: "{{site_path}}"
+      register: cleanup_files
+
+    - name: Remove files from /var/www/html
+      file:
+        path: "{{item.path}}"
+        state: absent
+      with_items: "{{cleanup_files.files}}"

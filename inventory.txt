@@ -13,8 +13,8 @@ ubuntu_server     	ansible_host=192.168.100.11  owner=owner_by_linux_ubuntu_serv
 
 
 [centos_servers]
-centos_server1		ansible_host=192.168.100.14
-centos_server2		ansible_host=192.168.100.15
+centos_server1		ansible_host=192.168.100.14 owner=owner_by_centos_server1
+centos_server2		ansible_host=192.168.100.15 owner=owner_by_centos_server2
 
 
 [kali_servers]

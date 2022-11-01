@@ -1,0 +1,9 @@
+
+---
+
+- name: Install Web Server
+  hosts: centos_server2, ubuntu_server2
+  become: yes
+
+  roles:
+    - remove_apache

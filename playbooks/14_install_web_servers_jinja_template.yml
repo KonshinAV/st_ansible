@@ -2,7 +2,7 @@
 ---
 
 - name: Install Web Server using loop site_2
-  hosts: all_servers
+  hosts: centos_server2, ubuntu_server2
   become: yes
   
   vars:
@@ -29,13 +29,19 @@
         - name: Start httpd service
           service: name=httpd state=started enabled=yes 
         when: ansible_os_family == "RedHat"
+      
+      - name: Generate Index.html file
+        template: src={{site_source}}/index.j2 dest={{site_dest}}/index.html
+        notify:
+          - restart_apache_debian
+          - restart_apache_redhat
 
       - name: Copy site
-        #copy: src={{site_source}}/ {{item}} dest={{site_dest}}
-        #with_items:
-        #  - "index.html"
-        copy: src={{item}} dest={{site_dest}}
-        with_fileglob: "{{site_source}}/*.*"
+        copy: src={{site_source}}/ {{item}} dest={{site_dest}}
+        with_items:
+         - "cat.jpg"
+        # copy: src={{item}} dest={{site_dest}}
+        # with_fileglob: "{{site_source}}/*.*"
 
       notify:
         - restart_apache_debian
