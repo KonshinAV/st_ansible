@@ -1,0 +1,35 @@
+
+---
+
+- name: Catch Errors
+  hosts: ubuntu_server2, centos_server2
+  any_errors_fatal: true # Останавливает работу плейбука при наличии любой ошибки
+  become: yes
+
+  tasks:
+
+  - name: install prog
+    ansible.builtin.yum:
+      name:
+        name: treeeee
+        state: latest
+    # ignore_errors: yes # игнорировать ошибки в таске
+    # any_errors_fatal: true
+
+  - name: task_1
+    ansible.builtin.shell:
+      cmd: echo Hello World!!!!
+    register: result_task_1
+    # failed_when: "'World' in result_task_1.stdout"
+    # failed_when: result_task_1.rc == 0
+
+  - ansible.builtin.debug:
+      var: result_task_1
+
+  - name: echo_2
+    ansible.builtin.shell:
+      echo Privet Mir!!!!
+    register: var_echo_2
+  
+  - ansible.builtin.debug:
+      var: var_echo_2
