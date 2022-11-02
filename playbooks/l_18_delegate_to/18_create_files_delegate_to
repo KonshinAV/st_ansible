@@ -1,0 +1,47 @@
+---
+
+- name: Create files with delegate to
+  hosts: ubuntu_server2, centos_server2
+  become: yes
+
+  vars:
+    my_text: "Hello from Ansible"
+
+  tasks:
+  - ansible.builtin.ping:
+
+  - name: Unregister (perform on 127.0.0.1)
+    ansible.builtin.shell: echo {{ansible_date_time.time}} This server {{inventory_hostname}} was unregistered, node name is {{ansible_nodename}} >> /home/log.txt
+    delegate_to: 127.0.0.1
+
+  - name: Create file1
+    ansible.builtin.copy:
+      dest: "/home/file1.txt"
+      owner: "konshinav"
+      group: "konshinav"
+      mode: 0755 
+      content: |
+        "{{my_text}} on file1"
+    # delegate_to: ubuntu_server2
+
+  
+  - name: Create file2
+    ansible.builtin.copy:
+      dest: /home/file2.txt
+      mode: 0755
+      content: |
+        {{my_text}} in file2
+  
+  - name: Reboot My Servers
+    ansible.builtin.reboot:
+      pre_reboot_delay: 10
+  
+  - name: Wait Servers
+    ansible.builtin.wait_for:
+      host: "{{inventory_hostname}}"
+      state: started 
+      delay: 5
+      timeout: 40
+    delegate_to: 127.0.0.1
+
+      
