@@ -1,0 +1,38 @@
+
+# Создание шифрованного файла
+ansible-vault create filename
+
+# Посмотреть шифрованный файла
+ansible-vault view filename
+
+# Редактирование шифрованного файла
+ansible-vault edit filename
+
+# Поменять пароль
+ansible-vault rekey filename
+
+# зашифровать файл
+ansible-vault encript filename
+
+# расшфровать файл
+ansible-vault decript filename
+
+# Запустить шифрованный плейбук с запросом пароля в консоли
+ansible-playbook playbook.yml --ask-vault-pass
+
+# Запустить плейбук, пароль берется из файла
+ansible-playbook playbook.yml --vault-password-file file.txt
+
+# Шифрование строки/переменной
+# vars: 
+#   adm_password: QWE!@#
+ansible-vault encript_string <Enter>
+QWE!@#<Ctrl+D>
+# или
+ansible-vault encript_string --stdin-name "QWE!@#"
+# или
+echo -n "QWE!@#" | ansible-vault encript_string
+# На выходе получаем шифрованную записб, которую надо вставить в плейбук
+# !vault | *
+# запускаем плейбук
+ansible-playbook playbook.yml --ask-vault-pass
